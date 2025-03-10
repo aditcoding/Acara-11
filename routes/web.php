@@ -1,18 +1,20 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\HomeController;
+use App\Http\Middleware\EnsureTokenIsValid;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index']);
+Route::middleware([EnsureTokenIsValid::class])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/profile', function () {
-    return 'Ini adalah halaman profile';
-});
+    Route::get('/profile' , function () {
+        return view('profile');
+    });
 
-Route::get('/dashboard', function () {
-    return 'Ini adalah halaman dashboard';
+    Route::get('/dashboard' , function () {
+        return "ini halaman dashboard";
+    });
 });
